@@ -10,8 +10,8 @@
             "dest": "QuotesApp/wsgi.py"
         },
         {
-            "src": "/static/(.*)",
-            "dest": "/static/$1"
+            "src": "QuotesApp/static/(.*)",
+            "dest": "QuotesApp/static/$1"
         }
     ]
 }
