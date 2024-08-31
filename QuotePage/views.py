@@ -48,10 +48,10 @@ def delete_comment(request,text):
         return redirect('index')
     return render(request,'index')
 
-def add_text_to_image(image,text,author,fontcolor,fontsize,fontfamily):
+def add_text_to_image(image,text,author,fontcolor,fontsize):
     draw = ImageDraw.Draw(image)
 
-    family = fontfamily+".ttf"
+    family = "arial.ttf"
 
     font = ImageFont.truetype(family,fontsize)
 
@@ -86,7 +86,7 @@ def quote_create(request):
             quote.save()
             response = requests.get(quote.photo.url)
             image_path = Image.open(BytesIO(response.content))
-            image_path = add_text_to_image(image_path,quote.quote_body,quote.name,quote.fontcolor,quote.fontsize,quote.fontfamily)
+            image_path = add_text_to_image(image_path,quote.quote_body,quote.name,quote.fontcolor,quote.fontsize)
             image_byte_arr = BytesIO()
             image_path.save(image_byte_arr,format='JPEG')
             image_byte_arr.seek(0)
@@ -112,7 +112,7 @@ def quote_edit(request,quote_id):
             quote.save()
             response = requests.get(quote.photo.url)
             image_path = Image.open(BytesIO(response.content))
-            image_path = add_text_to_image(image_path,quote.quote_body,quote.name,quote.fontcolor,quote.fontsize,quote.fontfamily)
+            image_path = add_text_to_image(image_path,quote.quote_body,quote.name,quote.fontcolor,quote.fontsize)
             image_byte_arr = BytesIO()
             image_path.save(image_byte_arr,format='JPEG')
             image_byte_arr.seek(0)
