@@ -53,7 +53,7 @@ def add_text_to_image(image,text,author,fontcolor,fontsize, fontfamily):
 
     family = fontfamily
 
-    font = ImageFont.truetype(family,fontsize)
+    font = ImageFont.load_default()
 
     maxwidth = image.width - 40
 
