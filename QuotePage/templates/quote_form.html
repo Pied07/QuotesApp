@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Quote Form{% endblock %}
+
+{% block content %}
+
+<div class="head d-flex justify-content-center">
+    <h2>
+        {% if form.instance.pk %}
+        Edit Quote
+        {% else %}
+        Create Quote
+        {% endif %}
+    </h2>
+</div>
+
+<div class="container d-flex justify-content-center">
+
+    <form method='POST'  enctype="multipart/form-data" class="form">
+        {% csrf_token %}
+        {{form.as_p}}
+        <label for="fontsize">Font Size: <span id="fontSizeValue">20</span>px</label>
+        <button class="btn btn-primary">Submit</button>
+    </form>
+    <script>
+        const slider = document.querySelector('input[type="range"]');
+        const output = document.getElementById('fontSizeValue');
+
+        slider.addEventListener('input',function() {
+            output.textContent = slider.value;
+        })
+    </script>
+</div>
+
+{% endblock %}

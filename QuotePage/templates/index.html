@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2 class="d-flex justify-content-center mt-3">Recent Quotes</h2>
+
+    <form method="post">
+      {% csrf_token %}
+      {% if user.is_authenticated %}
+    <a href="{% url "quote_create" %}" class="btn btn-primary mb-3">Create a Quote</a>
+    {% else %}
+    <a href="{% url "login" %}" class="btn btn-primary mb-3">Login to Create a Quote</a>
+    {% endif %}
+    </form>
+    
+
+
+    {% for quote in quotes %}
+    
+    <div class="card mb-3" style="width: 100%;">
+        {% if quote.photo %}
+        <img src="{{quote.photo.url}}" class="card-img-top">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{quote.title}}</h5>
+          <p class="card-text">{{quote.caption}}</p>
+          <p class="card-text">Last updated at: {{quote.updates_at}}</p>
+          <div class="row quote-actions">
+            <div class="col d-flex">
+                {% if quote.user == user %}
+            <a href="{% url "quote_edit" quote.id %}" class="btn btn-success m-2 justify-content-start">Edit Quote</a>
+            <form action="{% url "quote_delete" quote.id %}" method="post">
+              {% csrf_token %}
+              <button class="btn btn-danger m-2" onclick="return confirmDelete();" >Delete</button>
+            </form>
+            {% endif %}
+            
+            </div>
+            <div class="col justify-content-end d-flex">
+              <a href="{% url "download_quote_image" quote.id %}" download="{{quote.title}}.jpg" class="justify-content-end"><h3><i class="bi bi-download"></i></h3></a>
+            </div>
+          </div>
+          {% if user.is_authenticated %}
+          <p>{{quote.likes.count}} Likes</p>
+          <form action="{% url "index" %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="quote_id" value="{{quote.id}}">
+            <button name="like" type="submit" class="btn" ><h3><i class="bi bi-heart" style="color: red;" id="icon"></i></h3></button>
+          </form>
+
+          <h4>Comments</h4>
+          <div class="row quote-actions m-auto">
+            <ul>
+              {% for comment in quote.comments.all %}
+              <div class="col d-flex"><li><strong>{{comment.user.username }}:</strong> {{comment.text}}</li></div>
+              {% if user == comment.user %}
+              <form action="{% url "delete_comment" comment.text %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="quote_id" value="{{quote.id}}">
+                <div class="col d-flex"><button class="btn" style="width: 20px"><h5><i class="bi bi-trash d-flex justify-content-center " style="color: red;" ></i></h5></button></div>
+              </form>
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+          <form action="{% url "index" %}" method="post">
+            {% csrf_token %}
+            <div class="comment" style=" width: 100%;">
+              {{form.as_p}}
+            </div>
+            <input type="hidden" name="quote_id" value="{{quote.id}}">
+            <button type="submit" name="comment" class="btn btn-primary">Add Comment</button>
+          </form>
+          {% endif %}
+          
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        function confirmDelete(){
+            return confirm("Are you sure you want to delete this quote?")
+        }
+    </script>
+    
+    {% endfor %}
+    
+</div>
+
+{% endblock %}
