@@ -48,10 +48,10 @@ def delete_comment(request,text):
         return redirect('index')
     return render(request,'index')
 
-def add_text_to_image(image,text,author,fontcolor,fontsize, font):
+def add_text_to_image(image,text,author,fontcolor,fontsize, fontfamily):
     draw = ImageDraw.Draw(image)
 
-    family = font
+    family = fontfamily
 
     font = ImageFont.truetype(family,fontsize)
 
