@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 class QuoteForm(forms.ModelForm):
     class Meta:
         model = Quote
-        fields = ['name','title','quote_body','photo','caption','fontfamily,'fontcolor','fontsize']
+        fields = ['name','title','quote_body','photo','caption','fontfamily','fontcolor','fontsize']
         widgets = {
             'fontcolor': forms.TextInput(attrs={
                 'type': 'color'
