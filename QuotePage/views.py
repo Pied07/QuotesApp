@@ -73,7 +73,7 @@ def add_text_to_image(image,text,author,fontcolor,fontsize, font_url):
 
     copyright = "~ @"+author
     textbox = draw.textbbox((0,0),copyright,font=font)
-    draw.text((image.width - (textbox[2]-textbox[0])-10,image.height - (textbox[3]-textbox[1])-50), copyright, font= font, fill=fontcolor)
+    draw.text((image.width - (textbox[2]-textbox[0])-10,image.height - (textbox[3]-textbox[1])-20), copyright, font= font, fill=fontcolor)
     return image
 
 @login_required
