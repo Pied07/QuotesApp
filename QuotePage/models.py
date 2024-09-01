@@ -3,22 +3,18 @@ from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 import os
 from django.conf import settings
+import cloudinary.api
 
 # Create your models here.
 class Quote(models.Model):
 
     def get_font_family():
-        font_dir = os.path.join(settings.BASE_DIR,"QuotesApp/static/fonts")
-        font_files = os.listdir(font_dir)
-        font_choice = []
+        response = cloudinary.api.resources(type="upload",resource_type="raw",max_results=100)
 
-        for font_file in font_files:
-            if font_file.endswith(('.ttf')):
-                font_name = os.path.splitext(font_file)[0].replace('_',' ').title()
-                font_choice.append((font_file,font_name))
+        font_choice = [(resource['public_id'], resource['secure_url']) for resource in response['resources'] if resource["public_id"].lower().endswith(".ttf")]
+        formatted_choices = [(url, url.split('/')[-1].split('_')[0]) for _,url in font_choice]
 
-
-        return font_choice
+        return formatted_choices
 
 
 
