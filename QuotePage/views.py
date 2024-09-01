@@ -48,12 +48,12 @@ def delete_comment(request,text):
         return redirect('index')
     return render(request,'index')
 
-def add_text_to_image(image,text,author,fontcolor,fontsize, fontfamily):
+def add_text_to_image(image,text,author,fontcolor,fontsize, font_url):
     draw = ImageDraw.Draw(image)
 
-    family = fontfamily
+    response = requests.get(font_url)
 
-    font = ImageFont.truetype(family,fontsize)
+    font = ImageFont.truetype(BytesIO(response.content),fontsize)
 
     maxwidth = image.width - 40
 
@@ -112,6 +112,7 @@ def quote_edit(request,quote_id):
             quote.save()
             response = requests.get(quote.photo.url)
             image_path = Image.open(BytesIO(response.content))
+            print(quote.fontfamily)
             image_path = add_text_to_image(image_path,quote.quote_body,quote.name,quote.fontcolor,quote.fontsize,quote.fontfamily)
             image_byte_arr = BytesIO()
             image_path.save(image_byte_arr,format='JPEG')
